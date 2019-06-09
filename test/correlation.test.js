@@ -1,7 +1,7 @@
 const CorrelationIdsPlugin = require('../lib/correlation')
-const { ConsoleLogger } = require('@funcmaticjs/funcmatic')
+const { LoggerWrapper } = require('@funcmaticjs/funcmatic')
 
-describe('Essentials', () => {
+describe('Correlation', () => {
   let ctx = { }
   let plugin = null
   let noop = () => { }
@@ -12,14 +12,14 @@ describe('Essentials', () => {
       },
       context: { },
       state: { },
-      logger: new ConsoleLogger()
+      logger: new LoggerWrapper()
     }
     plugin = new CorrelationIdsPlugin()
   })
   it ('should set a new correlationId if not present in headers', async () => {
     ctx.context.awsRequestId = 'AWS-REQUEST-ID'
     await plugin.request(ctx, noop)
-    expect(ctx.logger.meta()).toMatchObject({
+    expect(ctx.logger.state()).toMatchObject({
       'x-correlation-id': 'AWS-REQUEST-ID',
     })
     ctx.logger.info("should include 'x-correlation-id' field")
@@ -27,7 +27,7 @@ describe('Essentials', () => {
   it ('should use an existing correlationId if present in headers', async () => {
     ctx.event.headers['x-correlation-id'] = 'AWS-REQUEST-ID'
     await plugin.request(ctx, noop)
-    expect(ctx.logger.meta()).toMatchObject({
+    expect(ctx.logger.state()).toMatchObject({
       'x-correlation-id': 'AWS-REQUEST-ID'
     })
   })
@@ -35,7 +35,7 @@ describe('Essentials', () => {
     ctx.event.headers['x-correlation-id'] = 'AWS-REQUEST-ID'
     ctx.event.headers['x-correlation-other'] = 'RELEVANT-CORRELATION-CONTEXT'
     await plugin.request(ctx, noop)
-    expect(ctx.logger.meta()).toMatchObject({
+    expect(ctx.logger.state()).toMatchObject({
       'x-correlation-id': 'AWS-REQUEST-ID',
       'x-correlation-other': 'RELEVANT-CORRELATION-CONTEXT'
     })

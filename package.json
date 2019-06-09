@@ -1,6 +1,6 @@
 {
   "name": "@funcmaticjs/correlation-plugin",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Funcmatic middleware plugin that sets 'x-correlation-id' in 'ctx.logger' so that log messages can be correlated across different functions and services",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
-    "@funcmaticjs/funcmatic": "0.0.1",
+    "@funcmaticjs/funcmatic": "0.0.4",
     "jest": "^24.8.0"
   },
   "jest": {
