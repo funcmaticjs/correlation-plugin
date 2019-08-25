@@ -20,25 +20,24 @@ describe('Correlation', () => {
     ctx.context.awsRequestId = 'AWS-REQUEST-ID'
     await plugin.request(ctx, noop)
     expect(ctx.logger.state()).toMatchObject({
-      'x-correlation-id': 'AWS-REQUEST-ID',
+      'X-Correlation-Id': 'AWS-REQUEST-ID',
     })
-    ctx.logger.info("should include 'x-correlation-id' field")
+    ctx.logger.info("should include 'X-Correlation-Id' field")
   })
   it ('should use an existing correlationId if present in headers', async () => {
-    ctx.event.headers['x-correlation-id'] = 'AWS-REQUEST-ID'
+    ctx.event.headers['X-Correlation-Id'] = 'AWS-REQUEST-ID'
     await plugin.request(ctx, noop)
     expect(ctx.logger.state()).toMatchObject({
-      'x-correlation-id': 'AWS-REQUEST-ID'
+      'X-Correlation-Id': 'AWS-REQUEST-ID'
     })
   })
   it ('should allow multiple correlation headers', async () => {
-    ctx.event.headers['x-correlation-id'] = 'AWS-REQUEST-ID'
-    ctx.event.headers['x-correlation-other'] = 'RELEVANT-CORRELATION-CONTEXT'
+    ctx.event.headers['X-Correlation-Id'] = 'AWS-REQUEST-ID'
+    ctx.event.headers['X-Correlation-Other'] = 'RELEVANT-CORRELATION-CONTEXT'
     await plugin.request(ctx, noop)
     expect(ctx.logger.state()).toMatchObject({
-      'x-correlation-id': 'AWS-REQUEST-ID',
-      'x-correlation-other': 'RELEVANT-CORRELATION-CONTEXT'
+      'X-Correlation-Id': 'AWS-REQUEST-ID',
+      'X-Correlation-Other': 'RELEVANT-CORRELATION-CONTEXT'
     })
-    ctx.logger.info("should inclue 'x-correlation-id' and 'x-correlation-other' fields")
   })
 })
